@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- values.properties 파일의 위치를 설정하기 -->
+	<context:property-placeholder location="classpath:values.properties" />
+
+	<context:component-scan base-package="myspring.di.annot" />
+	
+		<!-- MyHikariDataSource 클래스를 Bean으로 설정 -->
+	<bean id="hikariDataSource" class="myspring.di.xml.MyHikariDataSource" />
+	
+	<!-- MyBasicDataSource 클래스를 Bean으로 설정 -->
+	<bean id="basicDataSource" class="myspring.di.xml.MyBasicDataSource" />
+	
+	
+	<!-- MyDAO 클래스를 Bean으로 설정 setter injection -->
+	<bean id="myDAO" class="myspring.di.xml.MyDAO" scope="singleton">
+		<!-- setter injection -->
+		<property name="type" value="${myname1}" />
+		<property name="myDataSource" ref="basicDataSource" />
+	</bean>
+	
+	<!-- MyDAO 클래스를 Bean으로 설정 constructor injection -->
+	<bean id="myDAOCons" class="myspring.di.xml.MyDAO">
+		<!-- constructor injection -->
+<!-- 		<constructor-arg name="type" value="히카리" /> -->
+<!-- 		<constructor-arg name="dataSource" ref="hikariDataSource" /> -->
+		<constructor-arg index="0" value="${myname2}" />
+		<constructor-arg index="1" ref="hikariDataSource" />
+	</bean>
+</beans>
